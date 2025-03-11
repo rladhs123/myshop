@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 class MemberRepositoryTest {
 
-    MemberRepository memberRepository = new MemberRepository();
+    MemberRepository memberRepository;
 
     @BeforeEach
     void before() throws SQLException {

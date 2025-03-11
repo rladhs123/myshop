@@ -5,18 +5,25 @@ import myproject.shop.domain.Member;
 import myproject.shop.domain.Order;
 import myproject.shop.domain.OrderItem;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.*;
 
 class OrderRepositoryTest {
 
-    MemberRepository memberRepository = new MemberRepository();
-    ItemRepository itemRepository = new ItemRepository();
-    OrderItemRepository orderItemRepository = new OrderItemRepository();
-    OrderRepository orderRepository = new OrderRepository();
+
+    MemberRepository memberRepository;
+    ItemRepository itemRepository;
+    OrderItemRepository orderItemRepository;
+    OrderRepository orderRepository;
+
+    @BeforeEach
+    void before() {
+    }
 
     @Test
     void create() throws SQLException {

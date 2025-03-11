@@ -1,15 +1,20 @@
 package myproject.shop.repository;
 
+import lombok.RequiredArgsConstructor;
 import myproject.shop.connection.DBConnectionUtil;
 import myproject.shop.domain.OrderItem;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@RequiredArgsConstructor
 @Repository
 public class OrderItemRepository {
+
+    private final DataSource dataSource;
 
     public void createOrderItem(OrderItem orderItem) throws SQLException {
         String sql = "insert into order_item(order_id, item_id, order_price, quantity) values(?, ?, ?, ?)";
@@ -28,6 +33,6 @@ public class OrderItemRepository {
     }
 
     private Connection getConnection() throws SQLException {
-        return DBConnectionUtil.getConnection();
+        return dataSource.getConnection();
     }
 }

@@ -1,17 +1,24 @@
 package myproject.shop.repository;
 
+import lombok.RequiredArgsConstructor;
 import myproject.shop.connection.DBConnectionUtil;
 import myproject.shop.domain.Item;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
+@RequiredArgsConstructor
 @Repository
 public class ItemRepository {
+
+    private final DataSource dataSource;
 
     public Item save(Item item) throws SQLException {
         String sql = "insert into item(stockquantity, price) values(?, ?)";
@@ -68,7 +75,35 @@ public class ItemRepository {
         }
     }
 
+    public List<Item> findAll() throws SQLException {
+        String sql = "select * from item";
+
+        Connection connection = getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Item> itemList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                Item item = new Item();
+                item.setItemId(resultSet.getInt(1));
+                item.setStockQuantity(resultSet.getInt(2));
+                item.setPrice(resultSet.getInt(3));
+
+                itemList.add(item);
+            }
+            return itemList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        }
+    }
+
     private Connection getConnection() throws SQLException {
-        return DBConnectionUtil.getConnection();
+        return dataSource.getConnection();
     }
 }

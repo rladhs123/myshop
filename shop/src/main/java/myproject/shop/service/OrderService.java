@@ -10,7 +10,9 @@ import myproject.shop.repository.OrderItemRepository;
 import myproject.shop.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +39,9 @@ public class OrderService {
 
     public Order findOrder(int memberId) throws SQLException {
         return orderRepository.findOrder(memberId);
+    }
+
+    public List<Order> findAllOrder() throws SQLException {
+        return orderRepository.findAll();
     }
 }

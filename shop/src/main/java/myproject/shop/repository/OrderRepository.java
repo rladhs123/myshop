@@ -6,14 +6,20 @@ import myproject.shop.domain.Order;
 import myproject.shop.domain.OrderItem;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
+@RequiredArgsConstructor
 @Repository
 public class OrderRepository {
+
+    private final DataSource dataSource;
 
     public Order create(Order order) throws SQLException {
         String sql = "insert into orders(member_Id) values (?)";
@@ -62,7 +68,34 @@ public class OrderRepository {
         }
     }
 
+    public List<Order> findAll() throws SQLException {
+        String sql = "select * from orders";
+
+        Connection connection = getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Order> orderList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setOrderId(resultSet.getInt(1));
+                order.setMemberId(resultSet.getInt(2));
+
+                orderList.add(order);
+            }
+            return orderList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        }
+    }
+
     private Connection getConnection() throws SQLException {
-        return DBConnectionUtil.getConnection();
+        return dataSource.getConnection();
     }
 }

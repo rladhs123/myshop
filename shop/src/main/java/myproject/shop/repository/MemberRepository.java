@@ -1,10 +1,12 @@
 package myproject.shop.repository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.shop.connection.DBConnectionUtil;
 import myproject.shop.domain.Member;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +16,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
+@RequiredArgsConstructor
 @Slf4j
 public class MemberRepository {
+
+    private final DataSource dataSource;
 
     public Member save(Member member) throws SQLException {
         String sql = "insert into member(member_id, name, address) values(?, ?, ?)";
@@ -101,6 +106,6 @@ public class MemberRepository {
     }
 
     private Connection getConnection() throws SQLException {
-        return DBConnectionUtil.getConnection();
+        return dataSource.getConnection();
     }
 }

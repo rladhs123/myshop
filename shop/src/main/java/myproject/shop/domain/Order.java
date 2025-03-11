@@ -11,6 +11,9 @@ public class Order {
     private int memberId;
     private List<OrderItem> itemList = new ArrayList<>();
 
+    public Order() {
+    }
+
     public Order(int memberId, OrderItem... items) {
         this.memberId = memberId;
         for (OrderItem orderItem : items) {
