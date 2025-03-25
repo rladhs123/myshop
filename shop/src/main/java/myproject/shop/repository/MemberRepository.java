@@ -94,6 +94,18 @@ public class MemberRepository {
         }
     }
 
+    public void deleteById(int memberId) throws SQLException {
+        String sql = "delete from member where member_id = ?";
+
+        Connection connection = getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, memberId);
+        preparedStatement.executeUpdate();
+
+        preparedStatement.close();
+        connection.close();
+    }
+
     public void deleteAll() throws SQLException {
         String sql = "delete from member";
 

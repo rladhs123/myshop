@@ -28,6 +28,10 @@ public class MemberService {
         return memberList;
     }
 
+    public void deleteMember(int memberId) throws SQLException {
+        memberRepository.deleteById(memberId);
+    }
+
     public void deleteAll() throws SQLException {
         memberRepository.deleteAll();
     }

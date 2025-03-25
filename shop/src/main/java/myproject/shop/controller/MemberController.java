@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import myproject.shop.domain.Member;
 import myproject.shop.service.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -24,9 +25,15 @@ public class MemberController {
     public Member member(@PathVariable("memberId") int memberId) throws SQLException {
         return memberService.findOne(memberId);
     }
-    
+
     @PostMapping("/members/new")
     public Member joinMember(@RequestBody @Valid Member member) throws SQLException {
         return memberService.join(member);
+    }
+
+    @DeleteMapping("/members/{memberId}")
+    public ResponseEntity<String> deleteMember(@PathVariable("memberId") int memberId) throws SQLException {
+        memberService.deleteMember(memberId);
+        return ResponseEntity.ok("Success Delete Member");
     }
 }
