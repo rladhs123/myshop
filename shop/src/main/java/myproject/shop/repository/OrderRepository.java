@@ -43,22 +43,23 @@ public class OrderRepository {
         return order;
     }
 
-    public Order findOrder(int memberId) throws SQLException {
+    public List<Order> findOrder(int memberId) throws SQLException {
         String sql = "select * from orders where member_Id = ?";
 
         Connection connection = getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, memberId);
         ResultSet resultSet = preparedStatement.executeQuery();
+        List<Order> orderList = new ArrayList<>();
 
         try {
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Order order = new Order(memberId);
                 order.setOrderId(resultSet.getInt(1));
-                return order;
-            } else {
-                throw new NoSuchElementException();
+                orderList.add(order);
             }
+            return orderList;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

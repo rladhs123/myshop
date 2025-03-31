@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -30,6 +33,34 @@ public class OrderItemRepository {
 
         preparedStatement.close();
         connection.close();
+    }
+
+    public List<OrderItem> findOrderItem(int orderId) throws SQLException {
+        String sql = "select * from order_item where order_id = ?";
+        Connection connection = getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, orderId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrderId(orderId);
+                orderItem.setItemId(resultSet.getInt(2));
+                orderItem.setOrderPrice(resultSet.getInt(3));
+                orderItem.setQuantity(resultSet.getInt(4));
+                orderItemList.add(orderItem);
+            }
+            return orderItemList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        }
+
     }
 
     private Connection getConnection() throws SQLException {

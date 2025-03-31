@@ -37,8 +37,12 @@ public class OrderService {
         return createOrder;
     }
 
-    public Order findOrder(int memberId) throws SQLException {
-        return orderRepository.findOrder(memberId);
+    public List<Order> findOrder(int memberId) throws SQLException {
+        List<Order> orders = orderRepository.findOrder(memberId);
+        for (Order order : orders) {
+            order.setItemList(orderItemRepository.findOrderItem(order.getOrderId()));
+        }
+        return orders;
     }
 
     public List<Order> findAllOrder() throws SQLException {

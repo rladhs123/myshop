@@ -21,7 +21,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{memberId}")
-    public Order getOrder(@PathVariable("memberId") int memberId) throws SQLException {
+    public List<Order> getOrder(@PathVariable("memberId") int memberId) throws SQLException {
         return orderService.findOrder(memberId);
     }
 

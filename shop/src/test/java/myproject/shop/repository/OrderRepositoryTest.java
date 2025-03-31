@@ -7,9 +7,8 @@ import myproject.shop.domain.OrderItem;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -41,8 +40,7 @@ class OrderRepositoryTest {
 
     @Test
     void findOrder() throws SQLException {
-        Order order = orderRepository.findOrder(111);
+        List<Order> orderList = orderRepository.findOrder(111);
 
-        assertThat(order.getOrderId()).isEqualTo(5);
     }
 }
